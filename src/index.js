@@ -71,17 +71,19 @@ async function main() {
     if (input.serverToken || input.temporaryPublicStorage) {
       const uploadParams = []
 
+      if (input.basicAuthPassword) {
+        uploadParams.push(
+          `--basicAuth.username=${input.basicAuthUsername}`,
+          `--basicAuth.password=${input.basicAuthPassword}`,
+        )
+      }
+
       if (input.serverToken) {
         uploadParams.push(
           '--target=lhci',
           `--serverBaseUrl=${input.serverBaseUrl}`,
           `--token=${input.serverToken}`,
           '--ignoreDuplicateBuildFailure' // ignore failure on the same commit rerun
-        )
-      } else if (input.basicAuthPassword) {
-        uploadParams.push(
-          `--basicAuth.username=${input.basicAuthUsername}`,
-          `--basicAuth.password=${input.basicAuthPassword}`,
         )
       } else if (input.temporaryPublicStorage) {
         uploadParams.push('--target=temporary-public-storage')
